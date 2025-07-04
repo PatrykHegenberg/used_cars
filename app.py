@@ -5,25 +5,23 @@ import joblib
 import numpy as np
 
 MODEL_PATH = "data/ford_model.joblib"
+CSV_PATH = "data/ford.csv"
+
 try:
     model = joblib.load(MODEL_PATH)
 except Exception as e:
     model = None
 
-# Beispiel-Testdaten (ersetze durch echte Testdaten für Gütekriterien)
-X_test = pd.DataFrame(
-    {
-        "model": ["Fiesta", "Focus", "Fiesta", "Focus", "Fiesta"],
-        "year": [2015, 2016, 2017, 2018, 2019],
-        "transmission": ["Manual", "Manual", "Automatic", "Manual", "Automatic"],
-        "mileage": [50000, 40000, 30000, 20000, 10000],
-        "fuelType": ["Petrol", "Diesel", "Petrol", "Diesel", "Petrol"],
-        "tax": [30, 20, 30, 20, 30],
-        "mpg": [55.4, 60.1, 58.0, 61.4, 59.7],
-        "engineSize": [1.0, 1.5, 1.0, 1.5, 1.0],
-    }
-)
-y_test = np.array([12000, 13000, 14000, 15000, 16000])
+X_test = pd.read_csv(CSV_PATH)
+if "price" in X_test.columns:
+    y_test = X_test["price"].values
+    X_test = X_test.drop(columns=["price"])
+else:
+    y_test = np.array([12000, 13000, 14000, 15000, 16000])  # Fallback
+
+modelle = sorted(X_test["model"].dropna().unique())
+transmissions = sorted(X_test["transmission"].dropna().unique())
+fuel_types = sorted(X_test["fuelType"].dropna().unique())
 
 
 def evaluate_model(model, X_test, y_test):
@@ -79,11 +77,6 @@ def schätzen():
 
 root = tk.Tk()
 root.title("Auto-Preis Schätzung")
-
-# Beispielwerte für Dropdowns (ggf. an dein Modell anpassen)
-modelle = ["Fiesta", "Focus", "EcoSport", "Grand C-MAX", "Kuga", "Cougar"]
-transmissions = ["Manual", "Automatic", "Semi-Auto"]
-fuel_types = ["Petrol", "Diesel", "Hybrid", "Electric"]
 
 fields = [
     ("Modell:", "model", ttk.Combobox, {"values": modelle}),
