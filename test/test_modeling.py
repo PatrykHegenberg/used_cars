@@ -1,21 +1,20 @@
 import unittest
 import pandas as pd
 from src.modeling import build_preprocessor, build_model
-from src.deployment import save_model, load_model
 
-class TestDeployment(unittest.TestCase):
-    def test_save_and_load_model(self):
-        X = pd.DataFrame({'feature': [1, 2, 3, 4], 'model': ['A', 'B', 'A', 'B']})
-        y = [2, 4, 6, 8]
-        num, cat = ['feature'], ['model']
+
+class TestModelling(unittest.TestCase):
+    def test_build_preprocessor_and_model(self):
+        X = pd.DataFrame({"num": [1.0, 2.0, 3.0, 4.0], "cat": ["A", "B", "A", "B"]})
+        y = [10, 20, 30, 40]
+        num, cat = ["num"], ["cat"]
         preprocessor = build_preprocessor(num, cat)
+        self.assertIsNotNone(preprocessor)
         model = build_model(preprocessor)
         model.fit(X, y)
-        save_model(model, 'test_model.joblib')
-        loaded = load_model('test_model.joblib')
-        self.assertTrue(hasattr(loaded, 'predict'))
-        import os
-        os.remove('test_model.joblib')
+        preds = model.predict(X)
+        self.assertEqual(len(preds), len(y))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()
