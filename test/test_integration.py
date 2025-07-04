@@ -19,6 +19,7 @@ class TestIntegration(unittest.TestCase):
         num, cat = get_feature_types(X)
         preprocessor = build_preprocessor(num, cat)
         model = build_model(preprocessor)
+        model.named_steps["regressor"].early_stopping = False
         model.fit(X, y)
         rmse, r2, y_pred = evaluate_model(model, X, y)
         self.assertLess(rmse, 20000)

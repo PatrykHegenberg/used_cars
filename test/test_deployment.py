@@ -12,6 +12,7 @@ class TestDeployment(unittest.TestCase):
         num, cat = ["feature"], ["model"]
         preprocessor = build_preprocessor(num, cat)
         model = build_model(preprocessor)
+        model.named_steps["regressor"].early_stopping = False
         model.fit(X, y)
         save_model(model, "test_model.joblib")
         loaded = load_model("test_model.joblib")
