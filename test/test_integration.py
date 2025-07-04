@@ -1,7 +1,7 @@
 import unittest
 import pandas as pd
 from src.preparation import clean_strings, split_features_target, get_feature_types
-from src.modelling import build_preprocessor, build_model
+from src.modeling import build_preprocessor, build_model
 from src.evaluation import evaluate_model
 
 
@@ -26,4 +26,3 @@ class TestIntegration(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

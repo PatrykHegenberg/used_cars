@@ -1,7 +1,7 @@
 import unittest
 import os
 import pandas as pd
-from src.modelling import build_preprocessor, build_model
+from src.modeling import build_preprocessor, build_model
 from src.deployment import save_model, load_model
 
 
